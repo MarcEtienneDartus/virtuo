@@ -188,4 +188,15 @@ const calculateRentalPrice = (time,distance) => {
   return carsRentalPrice;
 }
 
-console.log(calculateRentalPrice(20,10))
+const calculateCommission = (time,distance) => {
+  let carsRentalPrice = calculateRentalPrice(time,distance)
+  carsRentalPrice.forEach(car => {
+    car.commission = {}
+    car.commission.insurance = car.price/2
+    car.commission.treasury = time
+    car.commission.virtuo = car.price - car.commission.insurance - car.commission.treasury
+  });
+  return carsRentalPrice;
+}
+
+console.log(calculateCommission(20,10))

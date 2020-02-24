@@ -164,11 +164,25 @@ console.log(actors);
 
 
 const calculateRentalPrice = (time,distance) => {
+  let discount = 1
+  if(time < 1){
+    discount = 1
+  }
+  if(time <= 4){
+    discount = 0.9
+  }
+  else if(time <= 10){
+    discount = 0.7
+  }
+  else{
+    discount = 0.5
+  }
+
   let carsRentalPrice = []
   cars.forEach(car => {
     let rentalPrice = {}
     rentalPrice.id = car.id
-    rentalPrice.price = time*car.pricePerDay+distance*car.pricePerKm
+    rentalPrice.price = (time*car.pricePerDay+distance*car.pricePerKm)*discount
     carsRentalPrice.push(rentalPrice);
   });
   return carsRentalPrice;

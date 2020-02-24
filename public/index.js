@@ -204,6 +204,8 @@ const addDeductibleOption = (carsRentalPrice,time) => {
     const costOption = 4 * time
     car.price += costOption
     car.commission.virtuo += costOption
+    car.options = {}
+    car.options.deductibleReduction = true
   });
   return carsRentalPrice;
 }

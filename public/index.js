@@ -199,4 +199,14 @@ const calculateCommission = (time,distance) => {
   return carsRentalPrice;
 }
 
+const addDeductibleOption = (carsRentalPrice,time) => {
+  carsRentalPrice.forEach(car => {
+    const costOption = 4 * time
+    car.price += costOption
+    car.commission.virtuo += costOption
+  });
+  return carsRentalPrice;
+}
+
 console.log(calculateCommission(20,10))
+console.log(addDeductibleOption(calculateCommission(20,10),20))

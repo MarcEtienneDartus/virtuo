@@ -161,3 +161,17 @@ const actors = [{
 console.log(cars);
 console.log(rentals);
 console.log(actors);
+
+
+const calculateRentalPrice = (time,distance) => {
+  let carsRentalPrice = []
+  cars.forEach(car => {
+    let rentalPrice = {}
+    rentalPrice.id = car.id
+    rentalPrice.price = time*car.pricePerDay+distance*car.pricePerKm
+    carsRentalPrice.push(rentalPrice);
+  });
+  return carsRentalPrice;
+}
+
+console.log(calculateRentalPrice(20,10))

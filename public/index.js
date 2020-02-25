@@ -210,55 +210,23 @@ const ProcessPricing = (rentals,cars) => {
   });
 }
 
-console.log(rentals)
+const PayActors = (actors,rentals) => {
+  actors.forEach(actor => {
+    rentals.forEach(rent => {
+      if(actor.rentalId === rent.id){
+        console.log(actor.payment)
+        actor.payment[0].amount = rent.price
+        actor.payment[1].amount = rent.price - rent.commission.insurance -  rent.commission.treasury -  rent.commission.virtuo
+        actor.payment[2].amount = rent.commission.insurance
+        actor.payment[3].amount = rent.commission.treasury
+        actor.payment[4].amount = rent.commission.virtuo
+      }
+    });
+  });
+}
 
+console.log(rentals)
 ProcessPricing(rentals,cars)
-
 console.log(rentals)
-
-
-// const calculateRentalPrice = (time,distance) => {
-//   let discount = 1
-//   if(time < 1){
-//     discount = 1
-//   }
-//   if(time <= 4){
-//     discount = 0.9
-//   }
-//   else if(time <= 10){
-//     discount = 0.7
-//   }
-//   else{
-//     discount = 0.5
-//   }
-//   let updatedCars = cars
-//   updatedCars.forEach(car => {
-//     updatedCars.price = (time*car.pricePerDay+distance*car.pricePerKm)*discount
-//   });
-//   return updatedCars;
-// }
-
-// const calculateCommission = (time,distance) => {
-//   let carsRentalPrice = calculateRentalPrice(time,distance)
-//   carsRentalPrice.forEach(car => {
-//     car.commission = {}
-//     car.commission.insurance = car.price/2
-//     car.commission.treasury = time
-//     car.commission.virtuo = car.price - car.commission.insurance - car.commission.treasury
-//   });
-//   return carsRentalPrice;
-// }
-
-// const addDeductibleOption = (carsRentalPrice,time) => {
-//   carsRentalPrice.forEach(car => {
-//     const costOption = 4 * time
-//     car.price += costOption
-//     car.commission.virtuo += costOption
-//     car.options = {}
-//     car.options.deductibleReduction = true
-//   });
-//   return carsRentalPrice;
-// }
-
-// console.log(calculateRentalPrice(20,10))
-// // console.log(addDeductibleOption(calculateCommission(20,10),20))
+PayActors(actors,rentals)
+console.log(actors)

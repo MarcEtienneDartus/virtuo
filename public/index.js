@@ -158,12 +158,13 @@ const actors = [{
   }]
 }];
 
-console.log(cars);
-console.log(rentals);
-console.log(actors);
+const calculatimeRentalTime = (rent) => {
+  let pickupDate = rent.pickupDate.substring(8)
+  let returnDate = rent.returnDate.substring(8)
+  return parseInt(returnDate) -  parseInt(pickupDate)+1
+}
 
-
-const calculateRentalPrice = (time,distance) => {
+const calculateRentalPrice = (rent,cars,time) => {
   let discount = 1
   if(time < 1){
     discount = 1
@@ -177,38 +178,87 @@ const calculateRentalPrice = (time,distance) => {
   else{
     discount = 0.5
   }
-
-  let carsRentalPrice = []
-  cars.forEach(car => {
-    let rentalPrice = {}
-    rentalPrice.id = car.id
-    rentalPrice.price = (time*car.pricePerDay+distance*car.pricePerKm)*discount
-    carsRentalPrice.push(rentalPrice);
-  });
-  return carsRentalPrice;
+  for (const carIndex in cars) {
+    const car = cars[carIndex]
+    if(car.id === rent.carId) {
+      return (time*car.pricePerDay+rent.distance*car.pricePerKm)*discount
+    }
+  }
 }
 
-const calculateCommission = (time,distance) => {
-  let carsRentalPrice = calculateRentalPrice(time,distance)
-  carsRentalPrice.forEach(car => {
-    car.commission = {}
-    car.commission.insurance = car.price/2
-    car.commission.treasury = time
-    car.commission.virtuo = car.price - car.commission.insurance - car.commission.treasury
-  });
-  return carsRentalPrice;
+const calculateCommission = (rent,time) => {
+  rent.commission.insurance = rent.price/2
+  rent.commission.treasury = time
+  rent.commission.virtuo = rent.price - rent.commission.insurance - rent.commission.treasury
 }
 
-const addDeductibleOption = (carsRentalPrice,time) => {
-  carsRentalPrice.forEach(car => {
-    const costOption = 4 * time
-    car.price += costOption
-    car.commission.virtuo += costOption
-    car.options = {}
-    car.options.deductibleReduction = true
-  });
-  return carsRentalPrice;
+
+
+const addDeductibleOption = (rent,time) => {
+  if(rent.options.deductibleReduction){
+    rent.price += 4 * time
+  }
 }
 
-console.log(calculateCommission(20,10))
-console.log(addDeductibleOption(calculateCommission(20,10),20))
+
+const ProcessPricing = (rentals,cars) => {
+  rentals.forEach(rent => {
+    let time = calculatimeRentalTime(rent)
+    rent.price = calculateRentalPrice(rent,cars,time)
+    calculateCommission(rent,time)
+    addDeductibleOption(rent,time)
+  });
+}
+
+console.log(rentals)
+
+ProcessPricing(rentals,cars)
+
+console.log(rentals)
+
+
+// const calculateRentalPrice = (time,distance) => {
+//   let discount = 1
+//   if(time < 1){
+//     discount = 1
+//   }
+//   if(time <= 4){
+//     discount = 0.9
+//   }
+//   else if(time <= 10){
+//     discount = 0.7
+//   }
+//   else{
+//     discount = 0.5
+//   }
+//   let updatedCars = cars
+//   updatedCars.forEach(car => {
+//     updatedCars.price = (time*car.pricePerDay+distance*car.pricePerKm)*discount
+//   });
+//   return updatedCars;
+// }
+
+// const calculateCommission = (time,distance) => {
+//   let carsRentalPrice = calculateRentalPrice(time,distance)
+//   carsRentalPrice.forEach(car => {
+//     car.commission = {}
+//     car.commission.insurance = car.price/2
+//     car.commission.treasury = time
+//     car.commission.virtuo = car.price - car.commission.insurance - car.commission.treasury
+//   });
+//   return carsRentalPrice;
+// }
+
+// const addDeductibleOption = (carsRentalPrice,time) => {
+//   carsRentalPrice.forEach(car => {
+//     const costOption = 4 * time
+//     car.price += costOption
+//     car.commission.virtuo += costOption
+//     car.options = {}
+//     car.options.deductibleReduction = true
+//   });
+//   return carsRentalPrice;
+// }
+
+// console.log(calculateRentalPrice(20,10))
+// // console.log(addDeductibleOption(calculateCommission(20,10),20))
